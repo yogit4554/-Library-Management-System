@@ -4,13 +4,17 @@ import {ApiError} from "../utils/apiError.js"
 import {ApiResponse} from "../utils/apiResponse.js"
 
 const addBook = asyncHandler(async(req,res)=>{
+    console.log(req.body);
+
     try {
         const createdbook = new Book(req.body);
+        const savedBook = await createdbook.save();
         if(!createdbook){
             throw new ApiError(400,error?.message || "eror while creating new book");
         }
+
         return res.status(201).json(
-            new ApiResponse(200,createdbook,"User Registered Succesfully")
+            new ApiResponse(200,savedBook,"Book Registered Succesfully")
         ) 
 
     } catch (error) {
@@ -24,6 +28,7 @@ const getBooks = asyncHandler(async(req,res)=>{
         if(!books){
             throw new ApiError(400,error?.message || "Error while fetching books!!");
         }
+        console.log(books);
 
         return res.status(200).json(
             new ApiResponse(200,books,"Books fetched Successfully!!")
@@ -73,13 +78,14 @@ const deleteBook = asyncHandler(async(req,res)=>{
 });
 
 const getBooksByAvailability = asyncHandler(async(req,res)=>{
+    console.log(req.id);
     try {
         const books = await Book.find({ availabilityStatus: req.query.available === 'true' });
         return res
         .status(200)
         .json(new ApiResponse(200,books,"Books Status checked!!"))
     } catch (error) {
-        throw new ApiError(400,"Erroe while checking availability");
+        throw new ApiError(400,"Error while checking availability");
     }
 });
 

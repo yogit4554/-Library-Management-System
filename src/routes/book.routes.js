@@ -6,12 +6,12 @@ import {
     getBooks,
     getBooksByAvailability
 } from "../controllers/book.controller.js"
-import { authMiddleware , adminMiddleware } from "../middlewares/auth.middlewares.js";
+import { authMiddleware , adminMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = Router()
 
-router.route("/").post(authMiddleware,adminMiddleware,addBook); // admin 
-router.route("/").get(authMiddleware,getBooks); // all user
+router.route("/addBook").post(authMiddleware,adminMiddleware,addBook); // admin 
+router.route("/getBooks").get(authMiddleware,getBooks); // all user
 router.route("/availability").get(authMiddleware,getBooksByAvailability); // all user
 
 router

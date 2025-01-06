@@ -5,7 +5,7 @@ import {
     getAllTransactions,
     getTransactionsByUser
 } from "../controllers/transaction.controller.js"
-import { authMiddleware} from "../middlewares/auth.middlewares.js";
+import { authMiddleware} from "../middlewares/auth.middleware.js";
 
 const router = Router()
 

@@ -12,7 +12,7 @@ const transactionSchema = new Schema({
         required:true
     },
     borrowDate:{
-        type:date,
+        type:Date,
         default:Date.now,
         required:true
     },

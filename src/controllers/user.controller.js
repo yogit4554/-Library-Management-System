@@ -4,11 +4,12 @@ import {ApiResponse} from "../utils/apiResponse.js"
 import {User} from "../models/user.models.js"
 import jwt from "jsonwebtoken"
 
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+const generateToken = (user) => {
+    return jwt.sign({ id: user._id, role: user.role }, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: '1d',
     });
-};
+  };
+
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
@@ -41,8 +42,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const registerUser = asyncHandler(async(req,res)=>{
     const { name, email, password , role } = req.body;
-    console.log(req.body);
-
+    
     try {
         // Check if admin already exists
         const existingAdmin = await User.findOne({ email });
@@ -50,12 +50,15 @@ const registerUser = asyncHandler(async(req,res)=>{
             throw new ApiError(400,"Email already exists!!")
         }
 
+
         // Create new admin
-        const admin = await User.create({ name, email, password , role });
+        const user = new User({ name, email, password, role });
+        await user.save();
         
         return res
         .status(201)
-        .json(new ApiResponse(200,admin,"new admin created!!"))
+        .json(new ApiResponse(200,user,"new admin created!!"))
+
     } catch (error) {
         throw new ApiError(400,"Error while registerting the admin!!")
     }
