@@ -24,7 +24,7 @@ import transactionRoutes from "./routes/transaction.routes.js"
 
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/books",bookRouter)
-app.use("app/v1/transactions",transactionRoutes)
+app.use("/api/v1/transactions",transactionRoutes)
 app.use("/api/v1/dashboard",dashboardRouter)
 
 export {app}

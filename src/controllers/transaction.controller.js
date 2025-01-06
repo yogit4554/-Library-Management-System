@@ -5,15 +5,20 @@ import {ApiError} from "../utils/apiError.js"
 import {ApiResponse} from "../utils/apiResponse.js"
 
 const borrowBook = asyncHandler(async(req,res)=>{
-    const { bookId, userId } = req.body;
+    const { bookId, userId , returnDate} = req.body;
+    console.log(bookId);
     try {
         const book = await Book.findById(bookId);
-
+        
         if(!book || !book.availabilityStatus){
             throw new ApiError(400,error?.message || "eror while checking status!!");
         }
-        const transaction = new Transaction({ bookId, userId });
+
+        console.log(book);
+        const transaction = new Transaction({ bookId, userId ,returnDate});
         await transaction.save();
+
+        console.log(transaction);
 
         book.availabilityStatus = false;
         await book.save();
@@ -23,14 +28,14 @@ const borrowBook = asyncHandler(async(req,res)=>{
         )
 
     } catch (error) {
-        throw new ApiError(400,"Error while creating book");
+        throw new ApiError(400,error.message || "Error while creating borrow");
     }
 });
 
 const returnBook = asyncHandler(async(req,res)=>{
     const { bookId, userId } = req.body;
     try {
-        const transaction = await Transaction.findOne({ bookId, userId, returnDate: null });
+        const transaction = await Transaction.findOne({ bookId, userId });
         if (!transaction) {
             throw new ApiError(400,"Transaction not found or book already returned");
         }
@@ -46,7 +51,7 @@ const returnBook = asyncHandler(async(req,res)=>{
             new ApiResponse(200,transaction,"Returned Successfully!!")
         )
     } catch (error) {
-        throw new ApiError(400,"Error while returning book");
+        throw new ApiError(400,error.message || "Error while returning book");
     }
 });
 // Get all transactions

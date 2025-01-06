@@ -63,9 +63,10 @@ const updateBook = asyncHandler(async(req,res)=>{
 });
 
 const deleteBook = asyncHandler(async(req,res)=>{
+    const {id}=req.params;
     try {
-        const Book = await Book.findById(id);
-        if(!user){
+        const deletingBook = await Book.findById(id);
+        if(!deletingBook){
             throw new ApiError(400,"Book not found")
         }
         await Book.findByIdAndDelete(id);
@@ -78,7 +79,6 @@ const deleteBook = asyncHandler(async(req,res)=>{
 });
 
 const getBooksByAvailability = asyncHandler(async(req,res)=>{
-    console.log(req.id);
     try {
         const books = await Book.find({ availabilityStatus: req.query.available === 'true' });
         return res
