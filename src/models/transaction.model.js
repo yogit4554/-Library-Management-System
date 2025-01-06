@@ -11,7 +11,7 @@ const transactionSchema = new Schema({
         ref:'User',
         required:true
     },
-    borrowYear:{
+    borrowDate:{
         type:date,
         default:Date.now,
         required:true

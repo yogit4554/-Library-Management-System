@@ -72,9 +72,21 @@ const deleteBook = asyncHandler(async(req,res)=>{
     }
 });
 
+const getBooksByAvailability = asyncHandler(async(req,res)=>{
+    try {
+        const books = await Book.find({ availabilityStatus: req.query.available === 'true' });
+        return res
+        .status(200)
+        .json(new ApiResponse(200,books,"Books Status checked!!"))
+    } catch (error) {
+        throw new ApiError(400,"Erroe while checking availability");
+    }
+});
+
 export {
     addBook,
     getBooks,
     updateBook,
-    deleteBook
+    deleteBook,
+    getBooksByAvailability
 }

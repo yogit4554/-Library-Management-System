@@ -3,18 +3,20 @@ import {
     addBook,
     updateBook,
     deleteBook,
-    getBooks
+    getBooks,
+    getBooksByAvailability
 } from "../controllers/book.controller.js"
-import { verifyJWT } from "../middlewares/auth.middlewares.js";
+import { authMiddleware , adminMiddleware } from "../middlewares/auth.middlewares.js";
 
 const router = Router()
 
-router.route("/").post(verifyJWT,addBook);
-router.route("/").get(verifyJWT,getBooks);
+router.route("/").post(authMiddleware,adminMiddleware,addBook); // admin 
+router.route("/").get(authMiddleware,getBooks); // all user
+router.route("/availability").get(authMiddleware,getBooksByAvailability); // all user
 
 router
     .route("/:id")
-    .put(verifyJWT,updateBook)
-    .delete(verifyJWT,deleteBook);
+    .put(authMiddleware,adminMiddleware,updateBook)  // admin
+    .delete(authMiddleware,adminMiddleware,deleteBook); //admin
 
 export default router

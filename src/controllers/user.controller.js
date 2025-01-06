@@ -40,7 +40,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const registerUser = asyncHandler(async(req,res)=>{
-    const { name, email, password , isAdmin } = req.body;
+    const { name, email, password , role } = req.body;
     console.log(req.body);
 
     try {
@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async(req,res)=>{
         }
 
         // Create new admin
-        const admin = await User.create({ name, email, password , isAdmin });
+        const admin = await User.create({ name, email, password , role });
         
         return res
         .status(201)
