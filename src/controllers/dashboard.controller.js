@@ -8,7 +8,7 @@ const getDashboardStats = asyncHandler(async(req,res)=>{
     try {
         const totalBooks = await Book.countDocuments();
         const borrowedBooks = await Transaction.countDocuments({ returnDate: null });
-        const availableBooks = totalBooks - borrowedBooks;
+        const availableBooks = await Book.countDocuments({ availabilityStatus: true });
 
         res.status(200).json({ totalBooks, borrowedBooks, availableBooks });
     } catch (error) {
